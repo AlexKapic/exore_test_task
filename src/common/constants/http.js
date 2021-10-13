@@ -14,5 +14,5 @@ export const ContentType = {
 };
 
 export const URL = {
-  API: "https://fakestoreapi.com/",
+  API: "https://fakestoreapi.com",
 };

@@ -12,7 +12,7 @@ class Http {
     const headers = this._getHeaders({ contentType });
 
     try {
-      const response = await fetch(`${URL.API}+${url}`, {
+      const response = await fetch(`${URL.API}${url}`, {
         method,
         headers,
         body: payload,
