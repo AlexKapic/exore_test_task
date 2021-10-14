@@ -12,7 +12,7 @@ class Products {
   }
 
   getOneProduct(id) {
-    return this._http.load("/products/${id}", {});
+    return this._http.load(`/products/${id}`, {});
   }
 }
 

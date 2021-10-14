@@ -1,0 +1,25 @@
+.product-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.info-block:not(:first-of-type) {
+  border: 1px solid grey;
+  border-radius: 3px;
+  padding: 3px 5px;
+}
+
+.info-block:not(:last-of-type) {
+  margin-bottom: 10px;
+}
+
+.info-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.info {
+  margin-left: 20px;
+}
