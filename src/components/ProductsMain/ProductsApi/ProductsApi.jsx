@@ -6,21 +6,43 @@ import {
   getLimitedProducts,
 } from "../../../store/productsApi/actions";
 import { useSelector } from "react-redux";
+import { Button } from "react-bootstrap";
 
 export const ProductsApi = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state);
-  console.log(products);
+
+  const onButtonClick = (items) => {
+    if (items) {
+      dispatch(getLimitedProducts(items));
+    } else {
+      dispatch(getProducts());
+    }
+  };
+
   useEffect(() => {
     dispatch(getLimitedProducts(8));
   }, []);
 
   return (
     <div className="container">
-      {products?.length &&
-        products.map((product) => {
-          return <ProductCard key={product.id} {...product} />;
-        })}
+      <div className="d-flex flex-row justify-content-center mx-4">
+        <Button onClick={() => onButtonClick(8)} className="mx-4 mb-4">
+          8 Products
+        </Button>
+        <Button onClick={() => onButtonClick(16)} className="mx-4 mb-4">
+          16 Products
+        </Button>
+        <Button onClick={() => onButtonClick()} className="mx-4 mb-4">
+          All products
+        </Button>
+      </div>
+      <div className="row justify-content-center">
+        {products?.length &&
+          products.map((product) => {
+            return <ProductCard key={product.id} {...product} />;
+          })}
+      </div>
     </div>
   );
 };
