@@ -9,7 +9,7 @@ import "./Product.css";
 
 export const Product = () => {
   const dispatch = useDispatch();
-  const { product } = useSelector((state) => state);
+  const { product } = useSelector((state) => state.productsApi);
   const params = useParams();
 
   useEffect(() => {

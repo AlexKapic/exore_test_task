@@ -10,7 +10,7 @@ import { Button } from "react-bootstrap";
 
 export const ProductsApi = () => {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state);
+  const { products } = useSelector((state) => state.productsApi);
 
   const onButtonClick = (items) => {
     if (items) {

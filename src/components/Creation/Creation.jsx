@@ -1,15 +1,24 @@
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { Form, Button } from "react-bootstrap";
+import { createProduct } from "../../store/productsOwn/actions";
 import "./Creation.css";
 
 export const Creation = () => {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+
+  const onSubmit = (data) => {
+    dispatch(createProduct({ ...data, createdAt: Date.now() }))
+      .unwrap()
+      .then(() => reset());
+  };
 
   return (
     <div className="container">
