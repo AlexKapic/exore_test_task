@@ -7,6 +7,7 @@ export const Header = () => {
         <Navbar.Brand href="/">EXORE</Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link href="/products">Products</Nav.Link>
+          <Nav.Link href="/create">Create product</Nav.Link>
         </Nav>
       </Container>
     </Navbar>

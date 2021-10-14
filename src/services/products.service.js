@@ -14,6 +14,8 @@ class Products {
   getOneProduct(id) {
     return this._http.load(`/products/${id}`, {});
   }
+
+  createProduct(product) {}
 }
 
 export { Products };
