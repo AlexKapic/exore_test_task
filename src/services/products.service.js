@@ -24,6 +24,14 @@ class Products {
       contentType: ContentType.JSON,
     });
   }
+
+  updateProduct(product) {
+    return this._http.load(`/products/${product.id}`, {
+      method: HttpMethod.PUT,
+      payload: JSON.stringify(product),
+      contentType: ContentType.JSON,
+    });
+  }
 }
 
 export { Products };

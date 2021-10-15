@@ -13,6 +13,7 @@ function App() {
         <Route exact path="/products" component={ProductsMain} />
         <Route exact path="/products/:id" component={Product} />
         <Route exact path="/create" component={Creation} />
+        <Route exact path="/editor/:id" component={Creation} />
         <Route exact path="*">
           WELCOME
         </Route>

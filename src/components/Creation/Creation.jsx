@@ -1,11 +1,15 @@
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Form, Button } from "react-bootstrap";
-import { createProduct } from "../../store/productsOwn/actions";
+import { createProduct, updateProduct } from "../../store/productsOwn/actions";
 import "./Creation.css";
+import { useHistory, useParams } from "react-router";
 
 export const Creation = () => {
+  const params = useParams();
   const dispatch = useDispatch();
+  const history = useHistory();
+  const { products } = useSelector((state) => state.productsOwn);
 
   const {
     register,
@@ -14,10 +18,22 @@ export const Creation = () => {
     formState: { errors },
   } = useForm();
 
+  const editedProduct =
+    params.id && products.find((product) => product.id === params.id);
+
   const onSubmit = (data) => {
-    dispatch(createProduct({ ...data, createdAt: Date.now() }))
-      .unwrap()
-      .then(() => reset());
+    if (params.id) {
+      dispatch(updateProduct({ ...editedProduct, ...data }))
+        .unwrap()
+        .then(() => {
+          reset();
+          history.goBack();
+        });
+    } else {
+      dispatch(createProduct({ ...data, createdAt: Date.now() }))
+        .unwrap()
+        .then(() => reset());
+    }
   };
 
   return (
@@ -26,12 +42,15 @@ export const Creation = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="position-absolute top-50 start-50 translate-middle w-50"
       >
-        <h1 className="text-center">New product</h1>
+        <h1 className="text-center">
+          {params.id ? "Edit product" : "New product"}
+        </h1>
         <Form.Group className="mb-3" controlId="formBasicTitle">
           <Form.Label>Title</Form.Label>
           <Form.Control
             type="text"
             placeholder="Title"
+            defaultValue={params.id && editedProduct && editedProduct.title}
             {...register("title", {
               required: true,
               minLength: 3,
@@ -49,6 +68,9 @@ export const Creation = () => {
             as="textarea"
             rows={4}
             placeholder="Description"
+            defaultValue={
+              params.id && editedProduct && editedProduct.description
+            }
             {...register("description", {
               required: true,
               minLength: 10,
@@ -67,6 +89,7 @@ export const Creation = () => {
           <Form.Control
             type="number"
             placeholder="Price"
+            defaultValue={params.id && editedProduct && editedProduct.price}
             {...register("price", { required: true, min: 1, max: 1000000 })}
           />
           {errors.price && (
@@ -78,21 +101,26 @@ export const Creation = () => {
           <Form.Check
             type="checkbox"
             label="Published"
+            defaultChecked={
+              params.id && editedProduct && editedProduct.published === true
+            }
             {...register("published")}
           />
         </Form.Group>
         <div className="d-flex justify-content-evenly">
           <Button className="w-25" variant="success" type="submit">
-            Create
+            {params.id && editedProduct ? "Save" : "Create"}
           </Button>
-          <Button
-            className="w-25"
-            variant="warning"
-            type="button"
-            onClick={() => reset()}
-          >
-            Clear form
-          </Button>
+          {!editedProduct && (
+            <Button
+              className="w-25"
+              variant="warning"
+              type="button"
+              onClick={() => reset()}
+            >
+              Clear form
+            </Button>
+          )}
         </div>
       </Form>
     </div>

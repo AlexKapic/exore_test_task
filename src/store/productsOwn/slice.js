@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createProduct } from "./actions";
+import { createProduct, updateProduct } from "./actions";
 
 const initialState = {
   products: [],
@@ -31,6 +31,25 @@ const productsOwnSlice = createSlice({
       state.preloader = false;
       state.error.status = true;
       state.error.message = "Error while create product";
+    },
+    [updateProduct.pending]: (state, action) => {
+      state.preloader = true;
+      state.error.status = false;
+      state.error.message = "";
+    },
+    [updateProduct.fulfilled]: (state, action) => {
+      state.preloader = false;
+      state.error.status = false;
+      state.error.message = "";
+      const id = action.payload.id;
+      state.products = state.products.map((product) =>
+        product.id === id ? action.payload : product
+      );
+    },
+    [updateProduct.rejected]: (state, action) => {
+      state.preloader = false;
+      state.error.status = true;
+      state.error.message = "Error while update product";
     },
   },
 });

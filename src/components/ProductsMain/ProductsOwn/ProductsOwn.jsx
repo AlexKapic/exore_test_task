@@ -11,7 +11,7 @@ export const ProductsOwn = ({ showOnlyPublished }) => {
   const { products } = useSelector((state) => state.productsOwn);
   const [productsToShow, setProductsToShow] = useState(products);
 
-  const headers = Object.keys(productsToShow?.[0]);
+  const headers = productsToShow.length && Object.keys(productsToShow?.[0]);
 
   useEffect(() => {
     if (showOnlyPublished) {
@@ -21,48 +21,62 @@ export const ProductsOwn = ({ showOnlyPublished }) => {
     }
   }, [showOnlyPublished]);
 
-  const onHandleEdit = () => {
-    history.push("/editor");
+  const onHandleEdit = (id) => {
+    history.push(`/editor/${id}`);
   };
 
   return (
     <div className="container">
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            {headers.map((title, idx) => (
-              <th key={idx}>{title}</th>
-            ))}
-            <th>Manage</th>
-          </tr>
-        </thead>
-        <tbody>
-          {productsToShow.map((product, idx) => {
-            return (
-              <tr key={idx}>
-                {Object.values(product).map((value, i) => {
-                  if (typeof value === "boolean") {
-                    return value ? <td key={i}>✔</td> : <td key={i}></td>;
-                  }
-                  return <td key={i}>{value}</td>;
-                })}
-                <td>
-                  <div className="text-center mb-4">
-                    <Button variant="primary" onClick={onHandleEdit}>
-                      <BiEdit />
-                    </Button>
-                  </div>
-                  <div className="text-center">
-                    <Button variant="danger">
-                      <MdDeleteForever />
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+      {productsToShow && productsToShow.length ? (
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              {headers.map((title, idx) => {
+                if (title !== "id") {
+                  return <th key={idx}>{title}</th>;
+                }
+              })}
+              <th>Manage</th>
+            </tr>
+          </thead>
+          <tbody>
+            {productsToShow.map((product) => {
+              return (
+                <tr key={product.id}>
+                  {Object.keys(product).map((key, i) => {
+                    if (typeof product[key] === "boolean") {
+                      return product[key] ? (
+                        <td key={i}>✔</td>
+                      ) : (
+                        <td key={i}></td>
+                      );
+                    } else if (key !== "id") {
+                      return <td key={i}>{product[key]}</td>;
+                    }
+                  })}
+                  <td>
+                    <div className="text-center mb-4">
+                      <Button
+                        variant="primary"
+                        onClick={() => onHandleEdit(product.id)}
+                      >
+                        <BiEdit />
+                      </Button>
+                    </div>
+                    <div className="text-center">
+                      <Button variant="danger">
+                        <MdDeleteForever />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      ) : (
+        <div>There are no products</div>
+      )}
     </div>
   );
 };
