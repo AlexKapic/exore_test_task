@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 import { createProduct, updateProduct, deleteProduct } from "./actions";
 
 const initialState = {
   products: [],
-  product: {},
   preloader: false,
   error: {
     status: false,
@@ -31,6 +31,7 @@ const productsOwnSlice = createSlice({
       state.preloader = false;
       state.error.status = true;
       state.error.message = "Error while create product";
+      toast.error(state.error.message);
     },
     [updateProduct.pending]: (state, action) => {
       state.preloader = true;
@@ -50,6 +51,7 @@ const productsOwnSlice = createSlice({
       state.preloader = false;
       state.error.status = true;
       state.error.message = "Error while update product";
+      toast.error(state.error.message);
     },
     [deleteProduct.pending]: (state, action) => {
       state.preloader = true;
@@ -68,6 +70,7 @@ const productsOwnSlice = createSlice({
       state.preloader = false;
       state.error.status = true;
       state.error.message = "Error while update product";
+      toast.error(state.error.message);
     },
   },
 });

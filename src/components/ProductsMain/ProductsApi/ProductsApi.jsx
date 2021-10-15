@@ -6,11 +6,11 @@ import {
   getLimitedProducts,
 } from "../../../store/productsApi/actions";
 import { useSelector } from "react-redux";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 
 export const ProductsApi = () => {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.productsApi);
+  const { products, preloader } = useSelector((state) => state.productsApi);
 
   const onButtonClick = (items) => {
     if (items) {
@@ -37,12 +37,18 @@ export const ProductsApi = () => {
           All products
         </Button>
       </div>
-      <div className="row justify-content-center">
-        {products?.length &&
-          products.map((product) => {
-            return <ProductCard key={product.id} {...product} />;
-          })}
-      </div>
+      {preloader ? (
+        <div className="d-flex justify-content-center align-items-center h-100">
+          <Spinner animation="border" variant="dark" />
+        </div>
+      ) : (
+        <div className="row justify-content-center">
+          {products?.[0] &&
+            products.map((product) => {
+              return <ProductCard key={product.id} {...product} />;
+            })}
+        </div>
+      )}
     </div>
   );
 };

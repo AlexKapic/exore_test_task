@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 import { getProducts, getLimitedProducts, getOneProduct } from "./actions";
 
 const initialState = {
@@ -31,6 +32,7 @@ const productsApiSlice = createSlice({
       state.preloader = false;
       state.error.status = true;
       state.error.message = "Error while get products from API";
+      toast.error(state.error.message);
     },
     [getLimitedProducts.pending]: (state, action) => {
       state.preloader = true;
@@ -47,6 +49,7 @@ const productsApiSlice = createSlice({
       state.preloader = false;
       state.error.status = true;
       state.error.message = "Error while get limited products from API";
+      toast.error(state.error.message);
     },
     [getOneProduct.pending]: (state, action) => {
       state.preloader = true;
@@ -63,6 +66,7 @@ const productsApiSlice = createSlice({
       state.preloader = false;
       state.error.status = true;
       state.error.message = "Error while get product from API";
+      toast.error(state.error.message);
     },
   },
 });

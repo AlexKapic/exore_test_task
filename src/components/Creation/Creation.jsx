@@ -10,6 +10,7 @@ import "./Creation.css";
 import { useHistory, useParams } from "react-router";
 import { useState } from "react";
 import DeleteModal from "../../common/components/DeleteModal/DeleteModal";
+import { toast } from "react-toastify";
 
 export const Creation = () => {
   const params = useParams();
@@ -34,19 +35,26 @@ export const Creation = () => {
         .unwrap()
         .then(() => {
           reset();
+          toast.info("Product updated");
           history.goBack();
         });
     } else {
       dispatch(createProduct({ ...data, createdAt: Date.now() }))
         .unwrap()
-        .then(() => reset());
+        .then(() => {
+          reset();
+          toast.success("Product created");
+        });
     }
   };
 
   const onDelete = () => {
     dispatch(deleteProduct(params.id))
       .unwrap()
-      .then(() => history.goBack());
+      .then(() => {
+        toast.warn("Product was deleted");
+        history.goBack();
+      });
   };
 
   return (
