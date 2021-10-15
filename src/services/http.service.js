@@ -1,9 +1,4 @@
-import {
-  HttpHeader,
-  HttpMethod,
-  ContentType,
-  URL,
-} from "../common/constants/http";
+import { HttpHeader, HttpMethod, URL } from "../common/constants/http";
 
 class Http {
   async load(url, options = {}) {

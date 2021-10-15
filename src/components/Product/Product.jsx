@@ -14,7 +14,7 @@ export const Product = () => {
 
   useEffect(() => {
     if (params?.id) dispatch(getOneProduct(params.id));
-  }, [params]);
+  }, [params, dispatch]);
 
   return (
     <div className="container d-flex">

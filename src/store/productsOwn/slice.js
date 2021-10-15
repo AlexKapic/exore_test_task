@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createProduct, updateProduct } from "./actions";
+import { createProduct, updateProduct, deleteProduct } from "./actions";
 
 const initialState = {
   products: [],
@@ -47,6 +47,24 @@ const productsOwnSlice = createSlice({
       );
     },
     [updateProduct.rejected]: (state, action) => {
+      state.preloader = false;
+      state.error.status = true;
+      state.error.message = "Error while update product";
+    },
+    [deleteProduct.pending]: (state, action) => {
+      state.preloader = true;
+      state.error.status = false;
+      state.error.message = "";
+    },
+    [deleteProduct.fulfilled]: (state, action) => {
+      state.preloader = false;
+      state.error.status = false;
+      state.error.message = "";
+      state.products = state.products.filter(
+        (product) => product.id !== action.payload
+      );
+    },
+    [deleteProduct.rejected]: (state, action) => {
       state.preloader = false;
       state.error.status = true;
       state.error.message = "Error while update product";

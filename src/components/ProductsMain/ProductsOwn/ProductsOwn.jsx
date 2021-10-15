@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Table, Button } from "react-bootstrap";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteForever } from "react-icons/md";
 import "./ProductsOwn.css";
 import { useHistory } from "react-router";
+import { deleteProduct } from "../../../store/productsOwn/actions";
+import DeleteModal from "../../../common/components/DeleteModal/DeleteModal";
 
 export const ProductsOwn = ({ showOnlyPublished }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const { products } = useSelector((state) => state.productsOwn);
   const [productsToShow, setProductsToShow] = useState(products);
+  const [modalShow, setModalShow] = useState(false);
+  const [idForDelete, setIdForDelete] = useState();
 
   const headers = productsToShow.length && Object.keys(productsToShow?.[0]);
 
@@ -19,10 +24,21 @@ export const ProductsOwn = ({ showOnlyPublished }) => {
     } else {
       setProductsToShow(products);
     }
-  }, [showOnlyPublished]);
+  }, [showOnlyPublished, products]);
 
   const onHandleEdit = (id) => {
     history.push(`/editor/${id}`);
+  };
+
+  const onHandleDelete = () => {
+    dispatch(deleteProduct(idForDelete))
+      .unwrap()
+      .then(() => setModalShow(false));
+  };
+
+  const prepareDelete = (id) => {
+    setModalShow(true);
+    setIdForDelete(id);
   };
 
   return (
@@ -35,6 +51,7 @@ export const ProductsOwn = ({ showOnlyPublished }) => {
                 if (title !== "id") {
                   return <th key={idx}>{title}</th>;
                 }
+                return null;
               })}
               <th>Manage</th>
             </tr>
@@ -53,6 +70,7 @@ export const ProductsOwn = ({ showOnlyPublished }) => {
                     } else if (key !== "id") {
                       return <td key={i}>{product[key]}</td>;
                     }
+                    return null;
                   })}
                   <td>
                     <div className="text-center mb-4">
@@ -64,7 +82,10 @@ export const ProductsOwn = ({ showOnlyPublished }) => {
                       </Button>
                     </div>
                     <div className="text-center">
-                      <Button variant="danger">
+                      <Button
+                        variant="danger"
+                        onClick={() => prepareDelete(product.id)}
+                      >
                         <MdDeleteForever />
                       </Button>
                     </div>
@@ -77,6 +98,11 @@ export const ProductsOwn = ({ showOnlyPublished }) => {
       ) : (
         <div>There are no products</div>
       )}
+      <DeleteModal
+        modalShow={modalShow}
+        hide={() => setModalShow(false)}
+        onDelete={() => onHandleDelete()}
+      />
     </div>
   );
 };

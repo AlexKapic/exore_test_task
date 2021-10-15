@@ -18,4 +18,12 @@ const updateProduct = createAsyncThunk(
     })
 );
 
-export { createProduct, updateProduct };
+const deleteProduct = createAsyncThunk(
+  ActionsTypes.DELETE,
+  async (id) =>
+    await products.deleteProduct("6").then(() => {
+      return id;
+    })
+);
+
+export { createProduct, updateProduct, deleteProduct };

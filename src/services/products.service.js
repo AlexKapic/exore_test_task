@@ -32,6 +32,12 @@ class Products {
       contentType: ContentType.JSON,
     });
   }
+
+  deleteProduct(id) {
+    return this._http.load(`/products/${id}`, {
+      method: HttpMethod.DELETE,
+    });
+  }
 }
 
 export { Products };

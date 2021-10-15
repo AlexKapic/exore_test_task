@@ -22,7 +22,7 @@ export const ProductsApi = () => {
 
   useEffect(() => {
     dispatch(getLimitedProducts(8));
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="container">

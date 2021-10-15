@@ -1,15 +1,22 @@
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Button } from "react-bootstrap";
-import { createProduct, updateProduct } from "../../store/productsOwn/actions";
+import {
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "../../store/productsOwn/actions";
 import "./Creation.css";
 import { useHistory, useParams } from "react-router";
+import { useState } from "react";
+import DeleteModal from "../../common/components/DeleteModal/DeleteModal";
 
 export const Creation = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
   const { products } = useSelector((state) => state.productsOwn);
+  const [modalShow, setModalShow] = useState(false);
 
   const {
     register,
@@ -34,6 +41,12 @@ export const Creation = () => {
         .unwrap()
         .then(() => reset());
     }
+  };
+
+  const onDelete = () => {
+    dispatch(deleteProduct(params.id))
+      .unwrap()
+      .then(() => history.goBack());
   };
 
   return (
@@ -111,7 +124,7 @@ export const Creation = () => {
           <Button className="w-25" variant="success" type="submit">
             {params.id && editedProduct ? "Save" : "Create"}
           </Button>
-          {!editedProduct && (
+          {!editedProduct ? (
             <Button
               className="w-25"
               variant="warning"
@@ -120,9 +133,23 @@ export const Creation = () => {
             >
               Clear form
             </Button>
+          ) : (
+            <Button
+              className="w-25"
+              variant="danger"
+              type="button"
+              onClick={() => setModalShow(true)}
+            >
+              Delete
+            </Button>
           )}
         </div>
       </Form>
+      <DeleteModal
+        modalShow={modalShow}
+        hide={() => setModalShow(false)}
+        onDelete={() => onDelete()}
+      />
     </div>
   );
 };
