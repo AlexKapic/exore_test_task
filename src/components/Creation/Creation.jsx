@@ -39,7 +39,12 @@ export const Creation = () => {
           history.goBack();
         });
     } else {
-      dispatch(createProduct({ ...data, createdAt: Date.now() }))
+      dispatch(
+        createProduct({
+          ...data,
+          createdAt: new Date(Date.now()).toLocaleString(),
+        })
+      )
         .unwrap()
         .then(() => {
           reset();
